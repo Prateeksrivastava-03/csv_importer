@@ -1,0 +1,28 @@
+{
+  "name": "csv-importer-backend",
+  "version": "1.0.0",
+  "description": "AI Powered CSV Importer - Backend (Express + OpenAI)",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-importer": "file:..",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "openai": "^4.56.0",
+    "streamifier": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
