@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const connectDB = require('./config/db');
 
 const uploadRoutes = require('./routes/uploadRoutes');
 const importRoutes = require('./routes/importRoutes');
@@ -82,27 +83,39 @@ app.use((req, res) => {
 // Centralized error handler (must be last)
 app.use(errorHandler);
 
-const server = app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`CSV Importer backend running on http://localhost:${PORT}`);
-});
+async function startServer() {
+  try {
+    await connectDB();
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
+    const server = app.listen(PORT, () => {
+      // eslint-disable-next-line no-console
+      console.log(`CSV Importer backend running on http://localhost:${PORT}`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        // eslint-disable-next-line no-console
+        console.error(
+          `\n[Startup error] Port ${PORT} is already in use.\n` +
+            `This usually means another copy of this backend (or something else) is already running.\n\n` +
+            `Fix it by either:\n` +
+            `  1) Finding and closing whatever is using port ${PORT}:\n` +
+            `       Windows:      netstat -ano | findstr :${PORT}   then   taskkill /PID <pid> /F\n` +
+            `       macOS/Linux:  lsof -i :${PORT}                  then   kill -9 <pid>\n` +
+            `  2) Or changing PORT in backend/.env to a free port and restarting.\n`
+        );
+        process.exit(1);
+      }
+
+      // eslint-disable-next-line no-console
+      console.error('[Startup error]', err);
+      process.exit(1);
+    });
+  } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(
-      `\n[Startup error] Port ${PORT} is already in use.\n` +
-        `This usually means another copy of this backend (or something else) is already running.\n\n` +
-        `Fix it by either:\n` +
-        `  1) Finding and closing whatever is using port ${PORT}:\n` +
-        `       Windows:      netstat -ano | findstr :${PORT}   then   taskkill /PID <pid> /F\n` +
-        `       macOS/Linux:  lsof -i :${PORT}                  then   kill -9 <pid>\n` +
-        `  2) Or changing PORT in backend/.env to a free port and restarting.\n`
-    );
+    console.error('[Startup error]', err.message || err);
     process.exit(1);
   }
+}
 
-  // eslint-disable-next-line no-console
-  console.error('[Startup error]', err);
-  process.exit(1);
-});
+startServer();
