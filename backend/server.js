@@ -45,21 +45,13 @@ async function startServer() {
 
     const server = app.listen(PORT, () => {
       // eslint-disable-next-line no-console
-      console.log(CSV Importer backend running on http://localhost:${PORT});
+    
     });
 
     server.on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
         // eslint-disable-next-line no-console
-        console.error(
-          \n[Startup error] Port ${PORT} is already in use.\n +
-            This usually means another copy of this backend (or something else) is already running.\n\n +
-            Fix it by either:\n +
-            `  1) Finding and closing whatever is using port ${PORT}:\n` +
-            `       Windows:      netstat -ano | findstr :${PORT}   then   taskkill /PID <pid> /F\n` +
-            `       macOS/Linux:  lsof -i :${PORT}                  then   kill -9 <pid>\n` +
-            `  2) Or changing PORT in backend/.env to a free port and restarting.\n`
-        );
+       
         process.exit(1);
       }
 
