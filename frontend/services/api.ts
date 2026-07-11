@@ -1,6 +1,6 @@
 import { CsvRow, ImportResponse, UploadResponse } from '@/utils/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://csv-importer-iv1f.onrender.com';
 
 /**
  * Uploads the raw CSV file to the backend /upload endpoint so it can be
